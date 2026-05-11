@@ -1,0 +1,29 @@
+# Core ML
+torch>=2.0.0
+transformers>=4.36.0
+datasets>=2.16.0
+accelerate>=0.25.0
+peft>=0.7.0
+bitsandbytes>=0.41.0
+sentencepiece>=0.1.99
+
+# Retrieval
+sentence-transformers>=2.2.0
+faiss-cpu>=1.7.4
+
+# Data processing
+scikit-learn>=1.3.0
+pdfplumber>=0.10.0
+
+# API and Demo
+fastapi>=0.104.0
+uvicorn>=0.24.0
+gradio>=4.0.0
+
+# HuggingFace
+huggingface-hub>=0.20.0
+
+# Utilities
+tqdm>=4.66.0
+numpy>=1.24.0
+pandas>=2.0.0

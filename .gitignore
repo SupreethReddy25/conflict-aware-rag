@@ -1,0 +1,45 @@
+# Virtual environment
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Data files (too large for git)
+data/raw/*.json
+data/raw/*.jsonl
+data/processed/*.jsonl
+
+# Model checkpoints
+*.pt
+*.pth
+*.bin
+*.safetensors
+checkpoints/
+outputs/
+
+# FAISS index
+*.faiss
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.log
+.env

@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from torch.optim import AdamW
-from torch.cuda.amp import autocast, GradScaler
+from torch.amp import autocast, GradScaler
 from sklearn.metrics import f1_score
 from tqdm.auto import tqdm
 
@@ -94,10 +94,11 @@ def train_detector():
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
+    model.float()  # Force all parameters to FP32 to fix the 'unscale FP16 gradients' error
     print(f"Using device: {device}")
     
     optimizer = AdamW(model.parameters(), lr=lr, eps=eps)
-    scaler = GradScaler()
+    scaler = GradScaler('cuda')
     
     best_f1 = 0.0
     model_save_path = os.path.join(base_dir, "model", "best_detector")
@@ -114,7 +115,7 @@ def train_detector():
             attention_mask = batch['attention_mask'].to(device)
             labels = batch['labels'].to(device)
             
-            with autocast():
+            with autocast('cuda'):
                 outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
                 loss = outputs.loss
                 
@@ -139,7 +140,7 @@ def train_detector():
                 attention_mask = batch['attention_mask'].to(device)
                 labels = batch['labels'].to(device)
                 
-                with autocast():
+                with autocast('cuda'):
                     outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
                     val_loss += outputs.loss.item()
                     
@@ -174,7 +175,7 @@ def train_detector():
             attention_mask = batch['attention_mask'].to(device)
             labels = batch['labels'].to(device)
             
-            with autocast():
+            with autocast('cuda'):
                 outputs = model(input_ids=input_ids, attention_mask=attention_mask)
                 
             preds = torch.argmax(outputs.logits, dim=-1)

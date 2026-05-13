@@ -106,7 +106,7 @@ def train_resolver():
         learning_rate=2e-4,
         logging_steps=10,
         save_strategy="epoch",
-        evaluation_strategy="epoch",
+        eval_strategy="epoch", # Fixed deprecated argument for new transformers version
         optim="paged_adamw_8bit",
         fp16=True, 
         max_grad_norm=0.3,

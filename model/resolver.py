@@ -78,6 +78,9 @@ def train_resolver():
     model.config.use_cache = False
     model.config.pretraining_tp = 1
     
+    # Enable gradient checkpointing to save massive VRAM on T4
+    model.gradient_checkpointing_enable()
+    
     # Prepare model for k-bit training
     model = prepare_model_for_kbit_training(model)
     
@@ -98,8 +101,8 @@ def train_resolver():
     training_args = TrainingArguments(
         output_dir=os.path.join(base_dir, "model", "resolver_checkpoints"),
         num_train_epochs=2,
-        per_device_train_batch_size=4,
-        gradient_accumulation_steps=4,
+        per_device_train_batch_size=1,    # Reduced to 1 for T4 16GB VRAM limit
+        gradient_accumulation_steps=16,   # Increased to 16 to keep effective batch size the same (16)
         learning_rate=2e-4,
         logging_steps=10,
         save_strategy="epoch",
